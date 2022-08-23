@@ -7,6 +7,8 @@ Created on Fri Aug 12 07:22:45 2022
 This is a script which aims to load AGS format data into a format usable by 
 Python, and then divide each Group into data frames.
 
+THIS IS A WORK IN PROGRESS!!!!!
+
 The AGS data used here was downloaded from https://webapps.bgs.ac.uk/services/ngdc/accessions/index.html?titleDescription=Scaraway#item131407
 
 Contains data supplied by Natural Environment Research Council.
