@@ -10,6 +10,11 @@ Python, and then divide each Group into data frames.
 The AGS data used here was downloaded from https://webapps.bgs.ac.uk/services/ngdc/accessions/index.html?titleDescription=Scaraway#item131407
 
 Contains data supplied by Natural Environment Research Council.
+
+Variable name explanation:
+raw -> unedited from CSV
+processed -> cleaned and formatted into a dataframe
+proj/hole/geol etc -> variables outwith the functions
 """
 
 import pandas as pd
@@ -48,9 +53,7 @@ def import_hole_data(import_df):
     headers = hole_raw.iloc[0]
     hole_processed = pd.DataFrame(hole_raw.values[1:], columns=headers)
     
-    #Print out hole position information.
-    #print(hole_processed.iloc[[1,4,7,10,12,14,16,18,20],0:7])
-    
+    #Clean by dropping duplicates
     print(hole_processed.drop_duplicates(subset=['*HOLE_ID']))
     
     return hole_processed
@@ -88,8 +91,8 @@ for obj in s3.Bucket('XXXXXXXXXXX').objects.all():
     print(obj)
     
 #Download file and use locally.
-#s3.Bucket('ags-python-bucket').download_file(Key='1-CO106833.007 - 2019-07-04 1120 - Final - 1.csv', Filename=r'C:\Users\Ross\Documents\AGS\download.csv')
-#pd.read_csv(r'C:\Users\Ross\Documents\AGS\download.csv')
+s3.Bucket('XXXXXXXXXXXX').download_file(Key='1-CO106833.007 - 2019-07-04 1120 - Final - 1.csv', Filename=r'C:\Users\Ross\Documents\AGS\download.csv')
+pd.read_csv(r'C:\Users\Ross\Documents\AGS\download.csv')
 
 import_df = pd.DataFrame(AGS_raw(r'C:\Users\Ross\Documents\AGS\download.csv'))
 proj = import_proj_data(import_df)
