@@ -31,9 +31,9 @@ from matplotlib.figure import Figure
 #S3 connection credentials.
 s3 = boto3.resource(
     service_name='s3',
-    region_name='eu-west-2',
-    aws_access_key_id='AKIATK62YKDSKHDITZEY',
-    aws_secret_access_key='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'
+    region_name='XXXXXXXXX',
+    aws_access_key_id='XXXXXXXXXXXXXXXXX',
+    aws_secret_access_key='XXXXXXXXXXXXXXXXXx'
 )
 
 def check_aws_bucket():
