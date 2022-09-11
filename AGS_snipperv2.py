@@ -23,6 +23,8 @@ that Python can deal with, I'll probably stick with CSV.
 import pandas as pd
 import boto3
 import tkinter as tk
+import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 
@@ -95,7 +97,7 @@ def AGS_raw(file_loc):
 
 def import_hole_data(import_df,row_start,row_end):
     
-    #Creates a new dataframe and then selects Rows 29-53 (HOLE section)
+    #Creates a new dataframe and then selects rows for HOLE section
     hole_raw = import_df.iloc[row_start:row_end,0:4]
     
     #Clean and recreate dataframe
@@ -106,7 +108,6 @@ def import_hole_data(import_df,row_start,row_end):
     #print(hole_processed.iloc[[1,4,7,10,12,14,16,18,20],0:7])
     
     print(hole_processed.drop_duplicates())
-    #subset=['*HOLE_ID'])
     return hole_processed
 
 def import_geol_data(import_df,row_start,row_end):
@@ -116,7 +117,7 @@ def import_geol_data(import_df,row_start,row_end):
     
     #Clean and recreate dataframe
     headers = geol_raw.iloc[0]
-    geol_processed = pd.DataFrame(geol_raw.values[1:], columns=headers)
+    geol_processed = pd.DataFrame(geol_raw.values[2:], columns=headers)
     #geol_processed = geol_processed.drop([0])
     
     #Print out hole position information.
@@ -166,15 +167,42 @@ def spt_to_tk(input_df):
     y = local_df['*ISPT_TOP'].astype(str).astype(float) #Convert to a usable format.
     
     plot1.scatter(x,y) #plot the graph
-    #plot1.title('SPT vs Depth plot')
+    plot1.set_title('SPT v Depth plot',fontsize = 14)
     plot1.set_xlabel('SPT N Value')
-    plot1.set_ylabel('Depth')
+    plot1.set_ylabel('Depth (mbgl)')
+    plot1.invert_yaxis()
     
     canvas = FigureCanvasTkAgg(fig, master = window) #Create the Tkinter canvas containing the matplotlib figure
     canvas.draw()
     canvas.get_tk_widget().pack()
     
     window.mainloop() #run the gui
+
+#Remove random numbers and import part of the GEOL table to this func
+def geol_to_table(borehole):
+    
+    fig, ax = plt.subplots()
+
+    # hide axes
+    fig.patch.set_visible(False)
+    ax.axis('off')
+    ax.axis('tight')
+
+    # df = pd.DataFrame(np.random.randn(10, 4), columns=list('ABCD')) # test dataframe.
+    df = geol
+    
+    df_new = df[df['*HOLE_ID'] == borehole]
+    
+    print(df_new)
+    
+    tab0 = ax.table(cellText=df_new.values, colLabels=df.columns, fontsize = 36, cellLoc='left')
+    tab0.auto_set_column_width(col=list(range(len(df_new.columns))))
+    tab0.auto_set_font_size(False)
+    #ax.table(cellText=df_new.values, colLabels=df.columns, loc='center', fontsize = 36).auto_set_font_size(False)
+    
+    #fig.tight_layout()
+
+    plt.show()
 
 
 #import_df = pd.DataFrame(AGS_raw(r'C:\Users\Ross\Documents\AGS\download.csv'))
@@ -199,8 +227,7 @@ import_proj_data(import_data)
 print("-------------------------------------------")
 #hole = import_hole_data(import_data,29,53)
 print("-------------------------------------------")
-#geol = import_geol_data(import_data,293,469)
+geol = import_geol_data(import_data,682,809)
 print("-------------------------------------------")
 ispt = import_ispt_data(import_data,1159,1239)
-
 print("-------------------------------------------")
