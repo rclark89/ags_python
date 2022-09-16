@@ -177,9 +177,17 @@ def spt_to_tk(input_df):
     canvas.get_tk_widget().pack()
     
     window.mainloop() #run the gui
+    
+def spt_to_chart(input_df):
+ 
+    x = input_df['*ISPT_NVAL'].astype(str).astype(float) #Convert to a usable format.
+    y = input_df['*ISPT_TOP'].astype(str).astype(float) #Convert to a usable format.
+    
+    plt.scatter(x,y)
+    plt.show()
+    
 
-#Remove random numbers and import part of the GEOL table to this func
-def geol_to_table(borehole):
+def geol_to_table(borehole): #future function: add SPT data for each 
     
     fig, ax = plt.subplots()
 
@@ -191,7 +199,9 @@ def geol_to_table(borehole):
     # df = pd.DataFrame(np.random.randn(10, 4), columns=list('ABCD')) # test dataframe.
     df = geol
     
-    df_new = df[df['*HOLE_ID'] == borehole]
+    df_new = df[df['*HOLE_ID'] == borehole] # Create new df for specific position.
+    
+    #Create new df joined on *HOLE_ID including *ISPT_NVAL and *ISPT_TOP
     
     print(df_new)
     
